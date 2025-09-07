@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val actionsQueue = mutableListOf<Pair<Long, String>>()
 
     private val PICK_DIRECTORY_REQUEST = 2
-    private var selectedVideoUri: Uri? = null
-    private var selectedJsonUri: Uri? = null
+
     private lateinit var player: ExoPlayer
     private val activeMoments = mutableListOf<VideoMoment>()
 
@@ -51,12 +50,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun selectDirectory() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
         startActivityForResult(intent, PICK_DIRECTORY_REQUEST)
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -66,8 +63,7 @@ class MainActivity : AppCompatActivity() {
             val treeUri = data?.data ?: return
 
             contentResolver.takePersistableUriPermission(
-                treeUri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                treeUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
 
             val directory = DocumentFile.fromTreeUri(this, treeUri) ?: return
@@ -76,13 +72,16 @@ class MainActivity : AppCompatActivity() {
             val jsonFiles = directory.listFiles().filter { it.name?.endsWith(".json") == true }
 
             if (videoFiles.isEmpty() || jsonFiles.isEmpty()) {
-                Toast.makeText(this, "No data useful found in the directory", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "No data useful found in the directory", Toast.LENGTH_LONG)
+                    .show()
                 return
             }
 
-            // Por simplicidad: tomar el primer video y su JSON con mismo nombre
+
             val video = videoFiles.first()
-            val json = jsonFiles.find { it.name?.substringBeforeLast('.') == video.name?.substringBeforeLast('.') }
+            val json = jsonFiles.find {
+                it.name?.substringBeforeLast('.') == video.name?.substringBeforeLast('.')
+            }
 
             if (json == null) {
                 Toast.makeText(this, "No JSON found for the video", Toast.LENGTH_LONG).show()
@@ -211,6 +210,8 @@ class MainActivity : AppCompatActivity() {
                     jumpToSegment(segId)
                     playerView.isClickable = true
                 }
+                playerView.isClickable = true
+
             }
             buttonsContainer.addView(button)
         }
@@ -221,6 +222,8 @@ class MainActivity : AppCompatActivity() {
     private fun hideMoment(moment: VideoMoment) {
         overlayTextView.visibility = View.GONE
         buttonsContainer.visibility = View.GONE
+        playerView.isClickable = true
+
     }
 
     private fun jumpToSegment(segmentId: String) {
