@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.github.klairm.interactiveplayer.databinding.ActivityMainBinding
 import com.github.klairm.interactiveplayer.entities.Choice
 import com.github.klairm.interactiveplayer.entities.VideoMoment
 import org.json.JSONObject
@@ -22,7 +23,7 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var binding: ConstraintLayout
+    private lateinit var binding: ActivityMainBinding
     private lateinit var playerView: PlayerView
     private lateinit var overlayTextView: TextView
     private lateinit var buttonsContainer: LinearLayout
@@ -33,12 +34,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        binding = findViewById(R.id.rootLayout)
-        playerView = findViewById(R.id.playerView)
-        overlayTextView = findViewById(R.id.overlayTextView)
-        buttonsContainer = findViewById(R.id.buttonsContainer)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        playerView = binding.playerView
+        overlayTextView = binding.overlayTextView
+        buttonsContainer = binding.buttonsContainer
 
         selectVideoFromDevice()
     }
