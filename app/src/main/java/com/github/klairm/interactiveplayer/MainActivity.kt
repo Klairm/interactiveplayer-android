@@ -158,6 +158,10 @@ class MainActivity : AppCompatActivity() {
         moment.choices?.forEach { choice ->
             val button = Button(this)
             button.text = choice.text
+            buttonsContainer.setOnClickListener {
+                Log.d("MainActivity:DEBUG:BTNCONTAINER", "Container clicked")
+            }
+
             button.setOnClickListener {
                 choice.segmentId?.let { segId ->
 
