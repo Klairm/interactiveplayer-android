@@ -155,18 +155,17 @@ class MainActivity : AppCompatActivity() {
         overlayTextView.visibility = View.VISIBLE
         Log.d("MainActivity:MOMENT", "Showing moment: $moment")
         buttonsContainer.removeAllViews()
+        playerView.focusable = 0
         moment.choices?.forEach { choice ->
             val button = Button(this)
             button.text = choice.text
-            buttonsContainer.setOnClickListener {
-                Log.d("MainActivity:DEBUG:BTNCONTAINER", "Container clicked")
-            }
 
             button.setOnClickListener {
                 choice.segmentId?.let { segId ->
 
                     Log.d("MainActivity:JUMP", "Jump to segment: $segId")
                     jumpToSegment(segId)
+                    playerView.focusable = 1
                 }
             }
             buttonsContainer.addView(button)
@@ -182,7 +181,7 @@ class MainActivity : AppCompatActivity() {
     private fun jumpToSegment(segmentId: String) {
         val moment = activeMoments.find { it.id == segmentId }
         moment?.let {
-            buttonsContainer.removeAllViews()
+         //   buttonsContainer.removeAllViews()
 
             player.seekTo(it.startMs)
         }
@@ -190,7 +189,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        buttonsContainer.removeAllViews()
 
         handler.removeCallbacksAndMessages(null)
         if (this::player.isInitialized) player.release()

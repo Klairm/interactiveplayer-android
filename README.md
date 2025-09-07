@@ -10,3 +10,5 @@ This app currently uses hardcoded ID (bad) so it will only work with the Headspa
 - [] Dashboard UI to display all your content
 - [] Use original images buttons for each media
 - [] Fix some choices
+- [] Icon app lol
+- [] Use dynamic video ID's
