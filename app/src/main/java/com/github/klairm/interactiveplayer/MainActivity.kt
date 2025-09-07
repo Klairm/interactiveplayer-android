@@ -142,10 +142,10 @@ class MainActivity : AppCompatActivity() {
                         showMoment(moment)
                     } else if (currentPosition > moment.endMs) {
                         hideMoment(moment)
-                // iterator.remove()
+                 iterator.remove()
                     }
                 }
-                handler.postDelayed(this, 200)
+                handler.postDelayed(this, 100)
             }
         })
     }
@@ -153,19 +153,21 @@ class MainActivity : AppCompatActivity() {
     private fun showMoment(moment: VideoMoment) {
         overlayTextView.text = moment.bodyText ?: ""
         overlayTextView.visibility = View.VISIBLE
-        Log.d("MainActivity:MOMENT", "Showing moment: $moment")
+        //Log.d("MainActivity:MOMENT", "Showing moment: $moment")
         buttonsContainer.removeAllViews()
-        playerView.focusable = 0
+        playerView.isClickable = false
+
         moment.choices?.forEach { choice ->
             val button = Button(this)
             button.text = choice.text
 
             button.setOnClickListener {
+                Log.d("MainActivity:CHOICE", "Choice clicked: $choice")
                 choice.segmentId?.let { segId ->
 
                     Log.d("MainActivity:JUMP", "Jump to segment: $segId")
                     jumpToSegment(segId)
-                    playerView.focusable = 1
+                    playerView.isClickable = true
                 }
             }
             buttonsContainer.addView(button)
@@ -181,7 +183,7 @@ class MainActivity : AppCompatActivity() {
     private fun jumpToSegment(segmentId: String) {
         val moment = activeMoments.find { it.id == segmentId }
         moment?.let {
-         //   buttonsContainer.removeAllViews()
+          buttonsContainer.removeAllViews()
 
             player.seekTo(it.startMs)
         }
