@@ -81,20 +81,34 @@ class MainActivity : AppCompatActivity() {
         return JSONObject(text)
     }
 
-    private fun parseMoments(json: JSONObject) {
-        val momentsBySegment = json
-            .optJSONObject("jsonGraph")
-            ?.optJSONObject("videos")
-            ?.optJSONObject("81328829") // FIXME: THIS IS HARDCODED!!!!!! EACH VIDEO HAS DIFFERENT ID DUH
+
+    
+    
+    
+    
+    
+    
+    
+    
+private fun parseMoments(json: JSONObject) {
+    val videos = json
+        .optJSONObject("jsonGraph")
+        ?.optJSONObject("videos") ?: return
+// I only tested with one json from one media so I cant be sure there wont be more than one ID in the videos object
+    val videoIds = videos.keys()
+    while (videoIds.hasNext()) {
+        val videoId = videoIds.next()
+        val momentsBySegment = videos
+            .optJSONObject(videoId)
             ?.optJSONObject("interactiveVideoMoments")
             ?.optJSONObject("value")
-            ?.optJSONObject("momentsBySegment") ?: return
+            ?.optJSONObject("momentsBySegment") ?: continue
 
         val segmentKeys = momentsBySegment.keys()
         while (segmentKeys.hasNext()) {
             val segmentKey = segmentKeys.next()
             val momentsArray = momentsBySegment.optJSONArray(segmentKey) ?: continue
- ///TODO: HORRIBLE
+
             for (i in 0 until momentsArray.length()) {
                 val moment = momentsArray.optJSONObject(i) ?: continue
                 val start = moment.optLong("startMs", -1)
@@ -126,13 +140,19 @@ class MainActivity : AppCompatActivity() {
                         end,
                         type,
                         bodyText,
-                        if (choicesList.isNotEmpty()) choicesList else null
+                        choicesList.ifEmpty { null }
                     )
                 )
             }
         }
-        actionsQueue.sortBy { it.first }
     }
+    actionsQueue.sortBy { it.first }
+}
+
+
+
+
+
 
     private fun startCheckingTimestamps() {
         handler.post(object : Runnable {
