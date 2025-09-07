@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- INTERNET PERMISSION IS HERE SINCE I WANT TO STREAM FROM JELLYFIN TOO -->
 <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:allowBackup="true"
